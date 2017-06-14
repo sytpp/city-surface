@@ -1,0 +1,53 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+setwd("~/XCHANGE/FCC/ETC-citysurface")
+```
+
+```{r, echo=FALSE}
+devtools::install_github('osmdatar/osmdata')
+library(osmdata)
+library(osmar)
+library(sp)
+library(sf)
+library(rgeos)
+```
+
+## Qurey OSM
+```{r}
+q <- opq(bbox = 'leipzig')
+q <- add_feature(q, key = 'leisure', value = 'park')
+q_sf <- osmdata_sf(q)
+
+names(q_sf$osm_polygons)
+```
+```{r}
+mypoly <- q_sf$osm_polygons$geometry[[1]]
+osmO <- get_osm(center_bbox(-0.0780735, 51.5618092, 3000, 3000))
+ids_relations <- osmO$relations$tags[osmO$relations$tags$v=="park","id"]
+ids_ways <- osmO$ways$tags[osmO$ways$tags$v=="park","id"]
+ids <- c(ids_relations, ids_ways)
+ids_all <- find_down(osmO, way(ids))
+osmOgreen <- subset(osmO, ids = ids_all)
+sp_green <- as_sp(osmOgreen, "polygons")
+sp_green$col = 1
+
+spplot(sp_green, c("col"), colorkey = FALSE, col.regions=c('red','blue'))
+```
+
+```{r}
+# that is not the right size!
+a1 <- sapply(bg_poly@polygons, function(x) x@area*1000000)
+
+bg_poly_t <- spTransform(bg_poly, CRS("+proj=longlat +datum=WGS84"))
+a2 <- rgeos::gArea(bg_poly_t, byid=TRUE)
+plot(a1, a2)
+```
+
+```{r}
+a1 <- sapply(bg_poly@polygons, function(x) x@area*1000000)
+
+```
