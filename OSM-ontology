@@ -1,0 +1,24 @@
+Area of entire city
+
+# Greenspace / Parks
+leisure ~ park
+leisure ~ garden
+leisure ~ nature_reserve
+leisure ~ playground
+
+# Buildings
+building ~ !houseboat
+
+# Car Parking
+amenity = parking (not any cycle parking, use exact value!)
+amenity = parking_space (for a single space)
+
+# Water
+waterway = riverbank (area rather than path
+natural = water
+
+# Streets
+highway = motorway / trunk / primary / secondary / tertiary / residential / service / motorway_link / trunk_link / primary_link / secondary_link / tertiary_link / living_street / road / unclassified
+
+surface = paved / concrete / paving_stones / cobblestine / pebblestone / asphalt 
+
